@@ -4,35 +4,35 @@
 
 using namespace std;
 
-typedef struct Foo { int data; node *tail; node *head; } node;
+typedef struct foo { int data; foo *tail; foo *head; } dbNode;
 
-void printOne(node *ptr);
-void printList(node *ptr);
-void printAll(node *ptr);
+void printOne(dbNode *ptr);
+void printList(dbNode *ptr);
+void printAll(dbNode *ptr);
 
-node* insertFront(node *ptr, int num);
-node* insertBack(node *ptr, int num);
+dbNode* insertFront(dbNode *ptr, int num);
+dbNode* insertBack(dbNode *ptr, int num);
 
-node* freeAll(node *pointer);
-node* freeOne(node *pointer);
+dbNode* freeAll(dbNode *pointer);
+dbNode* freeOne(dbNode *pointer);
 
-int listLength(node *pointer);
+int listLength(dbNode *pointer);
 
 
 
 int main(){
-  node *address = (node*)malloc(sizeof(node));
+  dbNode *address = (dbNode*)malloc(sizeof(dbNode));
   address = NULL;
-  
+ 
   address -> head = insertFront(address, 10);
   address = address -> head;
 }
 
-void printOne(node *point){
+void printOne(dbNode *point){
   cout << point -> data << endl;
 }
 
-void printList(node *point){
+void printList(dbNode *point){
   while(point){
     cout << point -> data << ", ";
     point = point -> tail;
@@ -40,61 +40,61 @@ void printList(node *point){
   point?cout << "SegFault\n" : cout << "Null\n";
 }
 
-void printAll(node *point){
+void printAll(dbNode *point){
   while(point->head){
     point = point -> head;
   }
   printList(point);
 }
 
-node* insertFront(node *point, int num){
-  node *new = (node*)malloc(sizeof(node));
-  new -> data = num;
-  new -> tail = point;
-  new -> head = point -> head;
-  return new;
+dbNode* insertFront(dbNode *point, int num){
+  dbNode* snode = (dbNode*)malloc(sizeof(dbNode));
+  snode -> data = num;
+  snode -> tail = point;
+  snode -> head = point -> head;
+  return snode;
 }
 
-node* insert back(node *point, int num){
-  node *new = (node*)malloc(sizeof(node));
-  new -> data = num;
-  new -> tail = point -> tail;
-  new -> head = point;
-  return new;
+dbNode* insertBack(dbNode *point, int num){
+  dbNode *snode = (dbNode*)malloc(sizeof(dbNode));
+  snode -> data = num;
+  snode -> tail = point -> tail;
+  snode -> head = point;
+  return snode;
 }
 
-node* freeAll(node *pointer){
-  while(point->head){
-    point = point -> head;
+dbNode* freeAll(dbNode *pointer){
+  while(pointer->head){
+    pointer = pointer -> head;
   }
-  
-  node *ptr  = point;
-  while(point){
-    point = point -> tail;
+ 
+  dbNode *ptr  = pointer;
+  while(pointer){
+    pointer = pointer -> tail;
     free(ptr);
-    ptr = point;
+    ptr = pointer;
   }
-  
-  return point;
+ 
+  return pointer;
 }
 
-node* freeOne(node *pointer){
-  (point -> head) -> tail = point -> tail;
-  (point -> tail) -> head = point -> head;
-  free(point);
-  point = NULL;
-  
-  return point;
+dbNode* freeOne(dbNode *pointer){
+  (pointer -> head) -> tail = pointer -> tail;
+  (pointer -> tail) -> head = pointer -> head;
+  free(pointer);
+  pointer = NULL;
+ 
+  return pointer;
 }
 
-int listLength(node *pointer){
-  while(point->head){
-    point = point -> head;
+int listLength(dbNode *pointer){
+  while(pointer->head){
+    pointer = pointer -> head;
   }
   int i = 0;
-  while (point){
+  while (pointer){
     i++;
   }
-  
+ 
   return i;
 }
