@@ -4,27 +4,21 @@
 #include <stdlib.h>
 
 void separate_cmds(char *s, char **list){
-  clear_strlist(list);
-  char *token, *delim;
-  while (s){
-    token = s;
-    delim = strstr(s, " ; ");
-    if (delim){
-      *delim = '\0';
-      s = delim + 3;
-    }
-    else
-      s = NULL;
-    *(list++) = strdup(token);
-  }
-
-  *list = NULL;
+  split(s, ';', list);
 }
 
 void separate_args(char *s, char **list){
+  split(s, ' ', list);
+}
+
+void split(char *s, char delim, char **list){
   clear_strlist(list);
-  while (s)
-    *(list++) = strdup(strsep(&s, " ") );
+  char *token;
+  while (s){
+    token = strsep(&s, &delim);
+    if (strlen(token) )
+      *(list++) = strdup(token);
+  }
   
   *list = NULL;
 

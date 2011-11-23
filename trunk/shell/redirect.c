@@ -40,15 +40,6 @@ struct rdr_t redirect_err(char *path){
   return ans;
 }
 
-struct rdr_t rdre_append(char *path){
-  struct rdr_t ans;
-  umask(0000);
-  ans.fd = open(path, O_CREAT | O_APPEND, 0644);
-  ans.std_fd = dup(STDERR_FILENO);
-  dup2(STDERR_FILENO, ans.fd);
-  return ans;
-}
-
 int pipe_io(){
   int out_fd = dup(STDOUT_FILENO);
   dup2(STDOUT_FILENO, STDIN_FILENO);
