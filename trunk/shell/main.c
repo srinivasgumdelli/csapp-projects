@@ -34,7 +34,7 @@ int main(){
     char **cmd_p = cmds;
     while (*cmd_p){
       separate_args(*(cmd_p++), args);
-      exec_cmd(args);
+      exec_cmd(args, cmds);
     }
   
   }
