@@ -27,21 +27,21 @@ void host(char *name){
 
 char *cwd(){
   char *full_path = getcwd(NULL, 0);
-  char *path;
+  char *home_path = home();
 
-  if (strstr(full_path, home() ) ){
-    size_t home_len = strlen(home() );
+  if (strstr(full_path, home_path) ){
+    size_t home_len = strlen(home_path);
     size_t len = strlen(full_path) - home_len + 1;
 
-    path = (char*)malloc(len + 1);
+    char *path = (char*)malloc(len + 1);
     path[0] = '~';
     strcpy(path + 1, full_path + home_len);
+
+    free(full_path);
+    return path;
   }
   else
-    path = strdup(full_path);
-
-  free(full_path);
-  return path;
+    return full_path;
 }
 
 char *home(){
