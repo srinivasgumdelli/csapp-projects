@@ -14,8 +14,9 @@ void separate_args(char *s, char **list){
 void split(char *s, char delim, char **list){
   clear_strlist(list);
   char *token;
+  char delim_str[] = {delim, '\0'};
   while (s){
-    token = strsep(&s, &delim);
+    token = strsep(&s, delim_str);
     if (strlen(token) )
       *(list++) = strdup(token);
   }

@@ -30,7 +30,7 @@ void bye(char **args, char **cmds, int status){
 
 void cd(char *newPath){
   // change the directory manually
-  if (!newPath || !strlen(newPath) )
+  if (!newPath)
     newPath = home();
   if (chdir(newPath) )
     fprintf(stderr, "cd: %s: %s\n", newPath, strerror(errno) );
@@ -39,7 +39,9 @@ void cd(char *newPath){
 void exec_file(char **args, char **cmds){
   pid_t child_pid = fork();
 
-  if(child_pid){
+  if (child_pid == -1)
+    fprintf(stderr, "%s: %s\n", args[0], strerror(errno) );
+  else if (child_pid){
     int status;
     waitpid(child_pid, &status, 0);
   }
