@@ -2,32 +2,41 @@
 
 #include <string.h>
 #include <stdlib.h>
+#include <stdio.h>
 
-void separate_cmds(char *s, char **list){
-  split(s, ';', list);
+char **separate_cmds(char *s){
+  return split(s, ';');
 }
 
-void separate_args(char *s, char **list){
-  split(s, ' ', list);
+char **separate_args(char *s){
+  return split(s, ' ');
 }
 
-void split(char *s, char delim, char **list){
-  clear_strlist(list);
+char **split(char *s, char delim){
+  char **list = NULL;
   char *token;
   char delim_str[] = {delim, '\0'};
+  size_t i = 0;
+
   while (s){
     token = strsep(&s, delim_str);
-    if (strlen(token) )
-      *(list++) = strdup(token);
+    if (strlen(token) ){
+      list = realloc(list, (i+2) * sizeof(*list) );
+      list[i++] = strdup(token);
+    }
   }
   
-  *list = NULL;
-
+  if (list)
+    list[i] = NULL;
+  
+  return list;
 }
 
-void clear_strlist(char **list){
-  while (*list){
-    free(*list);
-    *(list++) = NULL;
+void free_strlist(char **list){
+  if (list){
+    char **str_p;
+    for (str_p = list; *str_p; str_p++)
+      free(*str_p);
+    free(list);
   }
 }
