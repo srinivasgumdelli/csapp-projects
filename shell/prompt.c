@@ -18,7 +18,7 @@ void print_prompt(){
 }
 
 char *user(){
-  return getenv("USERNAME");
+  return getenv("USER");
 }
 
 void host(char *name){
@@ -26,22 +26,21 @@ void host(char *name){
 }
 
 char *cwd(){
-  char *full_path = getcwd(NULL, 0);
+  char *path = getcwd(NULL, 0);
   char *home_path = home();
+  size_t home_len = strlen(home_path);
 
-  if (strstr(full_path, home_path) ){
-    size_t home_len = strlen(home_path);
-    size_t len = strlen(full_path) - home_len + 1;
-
-    char *path = (char*)malloc(len + 1);
+  if (!strncmp(path, home_path, home_len) ){
     path[0] = '~';
-    strcpy(path + 1, full_path + home_len);
 
-    free(full_path);
-    return path;
+    size_t i = 0;
+    do path[i+1] = path[i + home_len];
+    while (path[i++ + home_len]);
+
+    return realloc(path, strlen(path) + 1);
   }
   else
-    return full_path;
+    return path;
 }
 
 char *home(){

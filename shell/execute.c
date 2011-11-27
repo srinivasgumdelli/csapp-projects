@@ -13,18 +13,18 @@
 
 void exec_cmd(char **args, char **cmds){
   // exits if argument is exit
-  if(!strcmp(args[0], "exit") )
+  if (!strcmp(args[0], "exit") )
     bye(args, cmds, EXIT_SUCCESS);
   // executes cd
-  else if(!strcmp(args[0], "cd") )
+  else if (!strcmp(args[0], "cd") )
     cd(args[1]);
-  else if (strlen(args[0]) )
+  else
     exec_file(args, cmds);
 }
 
 void bye(char **args, char **cmds, int status){
-  clear_strlist(args);
-  clear_strlist(cmds);
+  free_strlist(args);
+  free_strlist(cmds);
   exit(status);
 }
 
@@ -41,17 +41,20 @@ void exec_file(char **args, char **cmds){
 
   if (child_pid == -1)
     fprintf(stderr, "%s: %s\n", args[0], strerror(errno) );
-  else if (child_pid){
+
+  else if (child_pid > 0){
     int status;
     waitpid(child_pid, &status, 0);
   }
+
   else{
     char *full_path = args[0];
     args[0] = basename(full_path);
+
     if (execvp(full_path, args) ){
       fprintf(stderr, "%s: %s\n", full_path, strerror(errno) );
-      free(full_path);
-      bye(args + 1, cmds, EXIT_FAILURE);
+      args[0] = full_path;
+      bye(args, cmds, EXIT_FAILURE);
     }
   }
 }

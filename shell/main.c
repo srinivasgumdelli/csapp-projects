@@ -13,13 +13,10 @@ int main(){
   
   printf("\nWelcome to GoodShell!\nTotally not a ripoff of Bash.\n\n");
 
-  chdir("~");
+  chdir(home() );
 
   char input[MAX_INPUT];
-  char *cmds[256], *args[256];
-  size_t i;
-  for (i = 0; i < 256; i++)
-    cmds[i] = args[i] = NULL;
+  char **cmds, **cmd_p, **args;
 
   while(1){
     // new line with path for new command
@@ -29,14 +26,17 @@ int main(){
     read_line(input);
   		
     // seperates commands
-    separate_cmds(input, cmds);
-
-    char **cmd_p = cmds;
-    while (*cmd_p){
-      separate_args(*(cmd_p++), args);
-      exec_cmd(args, cmds);
+    cmds = separate_cmds(input);
+    if (cmds){
+      for (cmd_p = cmds; *cmd_p; cmd_p++){
+	args = separate_args(*cmd_p);
+	if (args){
+	  exec_cmd(args, cmds);
+	  free_strlist(args);
+	}
+      }
+      free_strlist(cmds);
     }
-  
   }
 
   return EXIT_FAILURE;
