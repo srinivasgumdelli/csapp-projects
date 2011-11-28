@@ -4,52 +4,58 @@
 #include <fcntl.h>
 #include <unistd.h>
 
+#include <stdio.h>
+#include <errno.h>
+#include <string.h>
+
+struct rdr_t redirect_std(int file_fd, int std_fd){
+  struct rdr_t fds;
+  fds.dup_fd = dup(std_fd);
+  fds.orig_fd = dup2(file_fd, std_fd);
+  close(file_fd);
+  return fds;
+}
+
 struct rdr_t redirect_out(char *path){
-  struct rdr_t ans;
   umask(0000);
-  ans.fd = open(path, O_CREAT | O_TRUNC | O_WRONLY, 0644);
-  ans.std_fd = dup(STDOUT_FILENO);
-  dup2(STDOUT_FILENO, ans.fd);
-  return ans;
+  int fd = open(path, O_CREAT | O_TRUNC | O_WRONLY, 0644);
+  return redirect_std(fd, STDOUT_FILENO);
 }
 
 struct rdr_t rdro_append(char *path){
-  struct rdr_t ans;
   umask(0000);
-  ans.fd = open(path, O_CREAT | O_APPEND | O_WRONLY, 0644);
-  ans.std_fd = dup(STDOUT_FILENO);
-  dup2(STDOUT_FILENO, ans.fd);
-  return ans;
+  int fd = open(path, O_CREAT | O_TRUNC | O_APPEND, 0644);
+  return redirect_std(fd, STDOUT_FILENO);
 }
 
 struct rdr_t redirect_in(char *path){
-  struct rdr_t ans;
-  ans.fd = open(path, O_RDONLY);
-  ans.std_fd = dup(STDIN_FILENO);
-  dup2(STDIN_FILENO, ans.fd);
-  return ans;
+  int fd = open(path, O_RDONLY);
+  return redirect_std(fd, STDIN_FILENO);
 }
 
 struct rdr_t redirect_err(char *path){
-  struct rdr_t ans;
   umask(0000);
-  ans.fd = open(path, O_CREAT | O_TRUNC | O_WRONLY, 0644);
-  ans.std_fd = dup(STDERR_FILENO);
-  dup2(STDERR_FILENO, ans.fd);
-  return ans;
+  int fd = open(path, O_CREAT | O_TRUNC | O_WRONLY, 0644);
+  return redirect_std(fd, STDERR_FILENO);
 }
 
 struct rdr_t rdre_append(char *path){
-  struct rdr_t ans;
   umask(0000);
-  ans.fd = open(path, O_CREAT | O_APPEND | O_WRONLY, 0644);
-  ans.std_fd = dup(STDERR_FILENO);
-  dup2(STDERR_FILENO, ans.fd);
-  return ans;
+  int fd = open(path, O_CREAT | O_TRUNC | O_APPEND, 0644);
+  return redirect_std(fd, STDERR_FILENO);
 }
 
 int pipe_io(){
-  int out_fd = dup(STDOUT_FILENO);
+  int in_fd = dup(STDIN_FILENO);
   dup2(STDOUT_FILENO, STDIN_FILENO);
-  return out_fd;
+  return in_fd;
+}
+
+void restore(struct rdr_t fds){
+  close(fds.orig_fd);
+  dup2(fds.dup_fd, fds.orig_fd);
+}
+
+void unpipe(int in_fd){
+  dup2(in_fd, STDIN_FILENO);
 }
