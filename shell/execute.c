@@ -12,6 +12,31 @@
 #include <libgen.h>
 
 void exec_cmd(char **args, char **cmds){
+  size_t size = 0;
+  struct rdr_t *redirects = NULL;
+
+  char *operators[] = {">", ">>", "<", "2>", "2>>"};
+  struct rdr_t (*function[])(char *)
+    = {&redirect_out, &rdro_append, &redirect_in,
+       &redirect_err, &rdre_append};
+
+  char **p;
+  size_t i;
+  for (p = args; *p; p++){
+    for (i = 0; i < 5; i++)
+      if (!strcmp(*p, operators[i]) ){
+	free(*p);
+	*p = NULL;
+
+	redirects = realloc(redirects, (size+1) * sizeof(*redirects) );
+	redirects[size++] = (*function[i])(*(++p) );
+
+	free(*p);
+	*p = NULL;
+	break;
+      }
+  }
+
   // exits if argument is exit
   if (!strcmp(args[0], "exit") )
     bye(args, cmds, EXIT_SUCCESS);
@@ -20,6 +45,9 @@ void exec_cmd(char **args, char **cmds){
     cd(args[1]);
   else
     exec_file(args, cmds);
+
+  for (i = 0; i < size; i++)
+    restore(redirects[i]);
 }
 
 void bye(char **args, char **cmds, int status){

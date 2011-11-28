@@ -33,9 +33,9 @@ char *cwd(){
   if (!strncmp(path, home_path, home_len) ){
     path[0] = '~';
 
-    size_t i = 0;
-    do path[i+1] = path[i + home_len];
-    while (path[i++ + home_len]);
+    char *p = path;
+    do *(p+1) = *(p+home_len);
+    while (*(p++ + home_len) );
 
     return realloc(path, strlen(path) + 1);
   }
