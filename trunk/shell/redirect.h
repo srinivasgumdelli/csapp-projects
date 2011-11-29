@@ -28,11 +28,5 @@ struct rdr_t redirect_err(char* path);
 struct rdr_t rdre_append(char* path);
 // Same as redirect_err, except it appends to the file instead of overwriting.
 
-int pipe_io();
-// Redirects stdin to stdout and returns a duplicate of STDIN_FILENO.
-
 void restore(struct rdr_t fds);
 // Redirects fds.orig_fd to fds.dup_fd and closes fds.dup_fd.
-
-void unpipe(int in_fd);
-// Redirects STDIN_FILENO to in_fd.

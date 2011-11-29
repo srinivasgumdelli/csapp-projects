@@ -45,17 +45,7 @@ struct rdr_t rdre_append(char *path){
   return redirect_std(fd, STDERR_FILENO);
 }
 
-int pipe_io(){
-  int in_fd = dup(STDIN_FILENO);
-  dup2(STDOUT_FILENO, STDIN_FILENO);
-  return in_fd;
-}
-
 void restore(struct rdr_t fds){
   close(fds.orig_fd);
   dup2(fds.dup_fd, fds.orig_fd);
-}
-
-void unpipe(int in_fd){
-  dup2(in_fd, STDIN_FILENO);
 }

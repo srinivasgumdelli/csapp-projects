@@ -1,7 +1,6 @@
 #include "execute.h"
 #include "parser.h"
 #include "prompt.h"
-#include "redirect.h"
 
 #include <string.h>
 #include <stdlib.h>
@@ -29,30 +28,33 @@ void exec_cmd(char **args, char **cmds){
 	*p = NULL;
 
 	redirects = realloc(redirects, (size+1) * sizeof(*redirects) );
-	redirects[size++] = (*function[i])(*(++p) );
+	redirects[size++] = (*function[i])(*(p+1) );
 
-	free(*p);
-	*p = NULL;
+	free(*(p+1) );
+	*(++p) = NULL;
 	break;
       }
   }
 
   // exits if argument is exit
   if (!strcmp(args[0], "exit") )
-    bye(args, cmds, EXIT_SUCCESS);
+    bye(args, cmds, redirects, EXIT_SUCCESS);
   // executes cd
   else if (!strcmp(args[0], "cd") )
     cd(args[1]);
   else
-    exec_file(args, cmds);
+    exec_file(args, cmds, redirects);
 
   for (i = 0; i < size; i++)
     restore(redirects[i]);
+
+  free(redirects);
 }
 
-void bye(char **args, char **cmds, int status){
+void bye(char **args, char **cmds, struct rdr_t *redirects, int status){
   free_strlist(args);
   free_strlist(cmds);
+  free(redirects);
   exit(status);
 }
 
@@ -64,7 +66,7 @@ void cd(char *newPath){
     fprintf(stderr, "cd: %s: %s\n", newPath, strerror(errno) );
 }
 
-void exec_file(char **args, char **cmds){
+void exec_file(char **args, char **cmds, struct rdr_t *redirects){
   pid_t child_pid = fork();
 
   if (child_pid == -1)
@@ -82,7 +84,7 @@ void exec_file(char **args, char **cmds){
     if (execvp(full_path, args) ){
       fprintf(stderr, "%s: %s\n", full_path, strerror(errno) );
       args[0] = full_path;
-      bye(args, cmds, EXIT_FAILURE);
+      bye(args, cmds, redirects, EXIT_FAILURE);
     }
   }
 }
