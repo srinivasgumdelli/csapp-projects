@@ -24,7 +24,7 @@ struct rdr_t redirect_out(char *path){
 
 struct rdr_t rdro_append(char *path){
   umask(0000);
-  int fd = open(path, O_CREAT | O_TRUNC | O_APPEND, 0644);
+  int fd = open(path, O_CREAT | O_APPEND | O_WRONLY, 0644);
   return redirect_std(fd, STDOUT_FILENO);
 }
 
@@ -41,7 +41,7 @@ struct rdr_t redirect_err(char *path){
 
 struct rdr_t rdre_append(char *path){
   umask(0000);
-  int fd = open(path, O_CREAT | O_TRUNC | O_APPEND, 0644);
+  int fd = open(path, O_CREAT | O_APPEND | O_WRONLY, 0644);
   return redirect_std(fd, STDERR_FILENO);
 }
 
