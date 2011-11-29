@@ -10,25 +10,24 @@
 #include <sys/wait.h>
 #include <libgen.h>
 
+char * const OPERATORS[] = {">", ">>", "<", "2>", "2>>"};
+struct rdr_t (* const FUNC_PTRS[])(char *)
+= {&redirect_out, &rdro_append, &redirect_in, &redirect_err, &rdre_append};
+
 void exec_cmd(char **args, char **cmds){
   size_t size = 0;
   struct rdr_t *redirects = NULL;
-
-  char *operators[] = {">", ">>", "<", "2>", "2>>"};
-  struct rdr_t (*function[])(char *)
-    = {&redirect_out, &rdro_append, &redirect_in,
-       &redirect_err, &rdre_append};
 
   char **p;
   size_t i;
   for (p = args; *p; p++){
     for (i = 0; i < 5; i++)
-      if (!strcmp(*p, operators[i]) ){
+      if (!strcmp(*p, OPERATORS[i]) ){
 	free(*p);
 	*p = NULL;
 
 	redirects = realloc(redirects, (size+1) * sizeof(*redirects) );
-	redirects[size++] = (*function[i])(*(p+1) );
+	redirects[size++] = (*FUNC_PTRS[i])(*(p+1) );
 
 	free(*(p+1) );
 	*(++p) = NULL;
