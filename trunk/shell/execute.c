@@ -11,17 +11,23 @@
 #include <libgen.h>
 
 char * const OPERATORS[] = {">", ">>", "<", "2>", "2>>"};
-struct rdr_t (* const FUNC_PTRS[])(char *)
-= {&redirect_out, &rdro_append, &redirect_in, &redirect_err, &rdre_append};
+struct rdr_t (* const FUNC_PTRS[])(char *) = {&redirect_out, &rdro_append, &redirect_in, &redirect_err, &rdre_append};
 
 void exec_cmd(char **args, char **cmds){
+  exec_helper(args, args, cmds);
+}
+
+void exec_helper(char **current_p, char **args, char **cmds){
+  if (!*current_p)
+    return;
+
   size_t size = 0;
   struct rdr_t *redirects = NULL;
 
   char **p;
   size_t i;
-  for (p = args; *p; p++){
-    for (i = 0; i < 5; i++)
+  for (p = current_p; *p; p++){
+    for (i = 0; i < 5; i++){
       if (!strcmp(*p, OPERATORS[i]) ){
 	free(*p);
 	*p = NULL;
@@ -33,21 +39,34 @@ void exec_cmd(char **args, char **cmds){
 	*(++p) = NULL;
 	break;
       }
+      else if (!strcmp(*p, "|") ){
+	free(*p);
+	*p = NULL;
+
+	int fds[2];
+	pipe_io(fds);
+
+	p++;
+	break;
+      }
+    }
   }
 
   // exits if argument is exit
-  if (!strcmp(args[0], "exit") )
+  if (!strcmp(*current_p, "exit") )
     bye(args, cmds, redirects, EXIT_SUCCESS);
   // executes cd
-  else if (!strcmp(args[0], "cd") )
-    cd(args[1]);
+  else if (!strcmp(*current_p, "cd") )
+    cd(current_p[1]);
   else
-    exec_file(args, cmds, redirects);
+    exec_file(current_p, args, cmds, redirects);
 
   for (i = 0; i < size; i++)
     restore(redirects[i]);
 
   free(redirects);
+
+  exec_helper(p, args, cmds);
 }
 
 void bye(char **args, char **cmds, struct rdr_t *redirects, int status){
@@ -65,7 +84,7 @@ void cd(char *newPath){
     fprintf(stderr, "cd: %s: %s\n", newPath, strerror(errno) );
 }
 
-void exec_file(char **args, char **cmds, struct rdr_t *redirects){
+void exec_file(char **current_p, char **args, char **cmds, struct rdr_t *redirects){
   pid_t child_pid = fork();
 
   if (child_pid == -1)

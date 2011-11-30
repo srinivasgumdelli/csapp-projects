@@ -50,11 +50,8 @@ void restore(struct rdr_t fds){
   dup2(fds.dup_fd, fds.orig_fd);
 }
 
-int pipe_io(){
-    return dup2(STDIN_FILENO, STDOUT_FILENO);
-}
-
-void unpipe(int in_fd){
-    // alright, what? Ten I don't know what you want with your function header.
-    dup2(in_fd, STDIN_FILENO);
+void pipe_io(int fds[2]){
+  pipe(fds);
+  dup2(STDIN_FILENO, fds[0]);
+  dup2(STDOUT_FILENO, fds[1]);
 }
