@@ -30,3 +30,6 @@ struct rdr_t rdre_append(char* path);
 
 void restore(struct rdr_t fds);
 // Redirects fds.orig_fd to fds.dup_fd and closes fds.dup_fd.
+
+void pipe_io(int fds[2]);
+// Creates a pipe between stdin and stdout.
