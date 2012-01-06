@@ -67,10 +67,12 @@ int main(){
   struct sockaddr_in servAddress;
   struct hostent *server;
 
-  sock = socket(AF_INET, SOCK_STREAM, 0);
+  sock = socket(AF_UNSPEC, SOCK_STREAM, 0);
+  if(sock < 0)
+	error("Error opening socket");
   portno = 5012;
 
-  bzero((char*) &servAddress, sizeof(servAddress));
+  memset(&servAddress, '\0', sizeof(servAddress));
   servAddress.sin_family = AF_INET;
-  serv_addr.sin_port = htons(portno);
+  servAddress.sin_port = htons(portno);
 }
