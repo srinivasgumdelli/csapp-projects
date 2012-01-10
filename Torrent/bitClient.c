@@ -17,15 +17,14 @@ This module does the servant part of the program. Acts as both client and server
 #define setPortNumber 5120
 #define BUFFER_MAX 256
 #define MAX_CLIENT 50
-#define ON 1
+#define ON 0
 #define OFF -1
 
-typedef struct foo {char name[BUFFER_MAX], int status} list;
+typedef struct {char name[BUFFER_MAX]; int status;} list;
 
-void error(const char *msg){
-    perror(msg);
-    exit(EXIT_FAILURE);
-}
+void error(const char *);
+list bootUp();
+void requestConnection(list *);
 
 /*
 Connect to Server, get List and then disconnect
@@ -74,10 +73,10 @@ list bootUp(){
     if(bytes < 0){
         error("Read from socket fail...");
     }
-    printf("%s\n", buffer); // replace with store function
+    printf("Done!");
     close(sockfd);  // close the server connection after done
 
-    return &onlineList;
+    return onlineList[MAX_CLIENT];
 }
 
 void requestConnection(list *onlineList){
@@ -103,4 +102,9 @@ void requestConnection(list *onlineList){
             printf("Client connected to %d", clientSock[i].name);
         }
     }
+}
+
+void error(const char *msg){
+    perror(msg);
+    exit(EXIT_FAILURE);
 }
