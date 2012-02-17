@@ -108,6 +108,11 @@ namespace LunarLevel
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
+            // Turning Culling off (all triangles displayed regardless of orientation)
+            RasterizerState rs = new RasterizerState();
+            rs.CullMode = CullMode.None;
+            device.RasterizerState = rs;
+
             // TODO: Add your drawing code here
             device.Clear(Color.DarkSlateBlue);
 
@@ -118,6 +123,10 @@ namespace LunarLevel
             }
 
             device.DrawUserPrimitives(PrimitiveType.TriangleList, vertices, 0, 1, VertexPositionColor.VertexDeclaration);
+
+            effect.Parameters["xView"].SetValue(viewMatrix);
+            effect.Parameters["xProjection"].SetValue(projectionMatrix);
+            effect.Parameters["xWorld"].SetValue(Matrix.Identity);
 
             // endTODO:
 
