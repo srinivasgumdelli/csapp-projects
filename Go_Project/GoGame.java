@@ -12,4 +12,5 @@ public class GoGame
 	root = current = new GameTreenode;
     }
 
+
 }
