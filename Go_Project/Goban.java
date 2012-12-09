@@ -191,6 +191,25 @@ public class Goban
     }
 
 
+    public void paintTerritory()
+    {
+	for(int x = 1; x <= _size; x++)
+	    for(int y = 1; y <= _size; y++)
+		{
+		    if(_board[x][y].getOccupied())
+			{
+			    if(!_board[x][y + 1].getOccupied())
+				this.markTerritory(_board[x][y].getAffiliation(), x, y + 1);
+			    if(!_board[x - 1][y].getOccupied())
+				this.markTerritory(_board[x][y].getAffiliation(), x - 1, y);
+			    if(!_board[x][y - 1].getOccupied())
+				this.markTerritory(_board[x][y].getAffiliation(), x, y - 1);
+			    if(!_board[x + 1][y].getOccupied())
+				this.markTerritory(_board[x][y].getAffiliation(), x + 1, y);
+			}
+		}
+    }
+
     private void markTerritory(Color c, int x, int y)
     {
 	boolean valid = (checkBounds(x, y)) && 
@@ -209,7 +228,7 @@ public class Goban
 		    }
 		else if( _board[x][y].getAffiliation() == Color.NONE)
 		    {
-_board[x][y].setAffiliation(c);
+			_board[x][y].setAffiliation(c);
 			this.markTerritory(c , x, y + 1);
 			this.markTerritory(c , x + 1, y);
 			this.markTerritory(c , x, y - 1);
@@ -293,9 +312,9 @@ _board[x][y].setAffiliation(c);
     public String toString()
     {
 	String ans = "";
-	for(int j = _size - 1; j > 0; j--)
+	for(int j = _size; j > 0; j--)
 	    {
-		for(int i = 1; i < _size; i++)
+		for(int i = 1; i <= _size; i++)
 		    {
 			String temp = "" +  _board[i][j].getAffiliation();
 			if(temp.equals("BLACK"))
@@ -359,6 +378,38 @@ _board[x][y].setAffiliation(c);
 	ban.capture(9, 9);	
 	System.out.println(ban.toString());
 	ban.markTerritory(Color.BLACK, 10, 10);
+	System.out.println(ban.toString());
+
+	ban = new Goban();
+	ban.playStone(Color.WHITE, 10, 10);
+	ban.playStone(Color.WHITE, 10, 11);
+	ban.playStone(Color.WHITE, 11, 10);
+	ban.playStone(Color.WHITE, 10, 9);
+	ban.playStone(Color.WHITE, 9, 10);
+	ban.playStone(Color.BLACK, 10, 12);
+	ban.playStone(Color.BLACK, 11, 11);
+	ban.playStone(Color.BLACK, 12, 10); 
+	ban.playStone(Color.BLACK, 9, 11);
+	ban.playStone(Color.BLACK, 8, 10);
+	ban.playStone(Color.BLACK, 10, 8);
+	ban.playStone(Color.BLACK, 11, 9);
+	ban.playStone(Color.BLACK, 9, 9);
+	ban.capture(9, 9);	
+	System.out.println(ban.toString());
+
+	ban.playStone(Color.WHITE, 9, 8);
+	ban.playStone(Color.WHITE, 8, 9);
+	ban.playStone(Color.WHITE, 10, 7);
+	ban.playStone(Color.WHITE, 11, 8);
+	ban.playStone(Color.WHITE, 12, 9);
+	ban.playStone(Color.WHITE, 13, 10);
+	ban.playStone(Color.WHITE, 7, 10);
+	ban.playStone(Color.WHITE, 8, 11);
+	ban.playStone(Color.WHITE, 9, 12);
+	ban.playStone(Color.WHITE, 10, 13);
+	ban.playStone(Color.WHITE, 11, 12);
+	ban.playStone(Color.WHITE, 12, 11);
+	ban.paintTerritory();
 	System.out.println(ban.toString());
     }//passes tests so far
 
