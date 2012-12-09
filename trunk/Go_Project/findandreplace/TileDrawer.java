@@ -36,8 +36,8 @@ public class TileDrawer{
     	for(int i = 0; i < dimension; i++)
     		for(int j = 0; j < dimension; j++){
     			switch(_board[i][j].getAffiliation()){
-    				case Affiliation.BLACK: g.setColor(Color.BLACK); break;
-    				case Affiliation.WHITE: g.setColor(Color.WHITE); break;
+    				case BLACK: g.setColor(Color.BLACK); break;
+    				case WHITE: g.setColor(Color.WHITE); break;
     				default: g.setColor(brown);
     			}
     			if (_board[i][j].getOccupied())
