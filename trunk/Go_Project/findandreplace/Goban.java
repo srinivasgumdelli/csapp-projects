@@ -258,10 +258,11 @@ public class Goban
 			for(int i = 0; i < _board.length; i++)
 			    for(int j = 0; j < _board[0].length; j++)
 				(_board[i][j]).setChecked(false);
-			if(suicide)
+			if(!this.capture(x, y))
 			    {
-				if(!this.capture(x, y))
+				if(suicide)
 				    {
+	
 					this.removeStone(l);
 					ret = false;
 				    }
