@@ -257,10 +257,10 @@ public class Goban
 			suicide = this.checkCapture(x, y);
 			for(int i = 0; i < _board.length; i++)
 			    for(int j = 0; j < _board[0].length; j++)
-				(_board[i][j]).setChecked(false);
-			if(suicide)
+				(_board[i][j]).setChecked(false);	       	
+			if(!this.capture(x, y))
 			    {
-				if(!this.capture(x, y))
+				if(suicide)
 				    {
 					this.removeStone(l);
 					ret = false;
@@ -394,7 +394,6 @@ public class Goban
 	ban.playStone(Color.BLACK, 10, 8);
 	ban.playStone(Color.BLACK, 11, 9);
 	ban.playStone(Color.BLACK, 9, 9);
-	ban.capture(9, 9);	
 	System.out.println(ban.toString());
 
 	ban.playStone(Color.WHITE, 9, 8);
