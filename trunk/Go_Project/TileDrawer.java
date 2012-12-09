@@ -1,20 +1,13 @@
-/**
- * @(#)TileDrawer.java
- *
- *
- * @author kjyuen2
- * @version 1.00 2012/12/7
- */
- 
- import javax.swing.JPanel;
- import java.awt.Color;
- import java.awt.*;
+import java.awt.Color;
+import java.awt.*;
 
-public class TileDrawer extends JPanel{
+public class TileDrawer{
 	
 	private final int cellSpace = 5;
  	private final int StoneSize = 5;
  	private int dimension = 0;
+ 	
+ 	Color brown = new Color(156, 93, 82);
  	
  	Location[][] _board;
 
@@ -28,7 +21,6 @@ public class TileDrawer extends JPanel{
     	Graphics2D g = (Graphics2D)graphics;
     	
     	// drawing the board
-    	Color brown = new Color(156, 93, 82);
     	g.setColor(brown);
     	g.fillRect(0, 0, cellSpace*dimension, cellSpace*dimension);
     	
@@ -43,9 +35,44 @@ public class TileDrawer extends JPanel{
     	// drawing stones with their color
     	for(int i = 0; i < dimension; i++)
     		for(int j = 0; j < dimension; j++){
-    			g.setColor(_board[i][j].getAffiliation());
+    			switch(_board[i][j].getAffiliation()){
+    				case BLACK: g.setColor(Color.BLACK); break;
+    				case WHITE: g.setColor(Color.WHITE); break;
+    				default: g.setColor(brown);
+    			}
     			if (_board[i][j].getOccupied())
     				g.fillOval(i*cellSpace, j*cellSpace, StoneSize, StoneSize);
     		}
     }
+    
+    // a less expensive update paint
+    public void repaint(int x, int y, Color side, Graphics graphics){
+    	// assumes the checks have been made
+    	Graphics2D g = (Graphics2D)graphics;
+    	if (side != Color.WHITE && side != Color.BLACK){
+    		g.setColor(brown);
+    		g.fillOval(x*cellSpace, y*cellSpace, StoneSize, StoneSize);
+    	} else {
+    		g.setColor(side);
+    		g.fillOval(x*cellSpace, y*cellSpace, StoneSize, StoneSize);
+    	}
+    }
+    
+    public static void main(String [] args){
+    	Goban ban = new Goban();
+    	TileDrawer draw = new TileDrawer(ban._board);
+    	ban.playStone(Color.WHITE, 1, 8);
+    }
+    
+    /*public void init(){
+    	try{
+    		SwingUtilities.invokeAndWait(new Runnable(){
+    			public void run(){
+    				
+    			}
+    		})
+    	} catch (Exception e){
+    		System.err.println("TileDrawer failed!");
+    	}
+    }*/
 }
