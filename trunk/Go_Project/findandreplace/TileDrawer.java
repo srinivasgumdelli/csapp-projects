@@ -9,11 +9,11 @@ public class TileDrawer{
  	
  	Color brown = new Color(156, 93, 82);
  	
- 	Location[][] _board;
+ 	Goban _board;
 
-    public TileDrawer(Location[][] board) {
+    public TileDrawer(Goban board) {
     	_board = board;
-    	dimension = board.length;
+    	dimension = _board.getSize();
 
     }
     
@@ -35,12 +35,12 @@ public class TileDrawer{
     	// drawing stones with their color
     	for(int i = 0; i < dimension; i++)
     		for(int j = 0; j < dimension; j++){
-    			switch(_board[i][j].getAffiliation()){
+		    switch(_board.getLocation(i, j).getAffiliation()){
     				case BLACK: g.setColor(Color.BLACK); break;
     				case WHITE: g.setColor(Color.WHITE); break;
     				default: g.setColor(brown);
     			}
-    			if (_board[i][j].getOccupied())
+		    if (_board.getLocation(i, j).getOccupied())
     				g.fillOval(i*cellSpace, j*cellSpace, StoneSize, StoneSize);
     		}
     }
@@ -59,7 +59,7 @@ public class TileDrawer{
     
     public static void main(String [] args){
     	Goban ban = new Goban();
-    	TileDrawer draw = new TileDrawer(ban._board);
+    	TileDrawer draw = new TileDrawer(ban);
     	ban.playStone(Affiliation.WHITE, 1, 8);
     }
 }

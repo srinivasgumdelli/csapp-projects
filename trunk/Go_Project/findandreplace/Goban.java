@@ -1,8 +1,8 @@
 public class Goban
 {
 
-    Location[][] _board;
-    int _size;
+    private Location[][] _board;
+    private int _size;
  
     /**
      * Constructor, _board is initialized to a size that is two units larger
@@ -23,6 +23,10 @@ public class Goban
 	this(19);
     }
 
+    public int getSize()
+    {
+	return _size;
+    }
     private boolean checkBounds(int x, int y )
     {
 	return (x <= _size && x >= 1 && y <= _size && y >= 1); 
