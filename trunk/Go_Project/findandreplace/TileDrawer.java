@@ -60,6 +60,6 @@ public class TileDrawer{
     public static void main(String [] args){
     	Goban ban = new Goban();
     	TileDrawer draw = new TileDrawer(ban._board);
-    	ban.playStone(Color.WHITE, 1, 8);
+    	ban.playStone(Affiliation.WHITE, 1, 8);
     }
 }
