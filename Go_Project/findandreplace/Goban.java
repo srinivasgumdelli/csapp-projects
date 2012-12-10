@@ -185,8 +185,8 @@ public class Goban
 		    }		
 		else
 		    {
-			System.out.println
-			    ("Warning, checkCapture called on empty location");
+			//System.out.println
+			//  ("Warning, checkCapture called on empty location");
 			ret = false;
 		    }
 	    }
@@ -334,6 +334,20 @@ public class Goban
 	return ans;
     }
 
+
+    public int countTerritory(Affiliation c, String type)
+    {
+	int ret = 0;
+	if(type.equals("Chinese"))
+	    {
+		for(int x = 1; x <= _size; x++)
+		    for(int y = 1; y <= _size; y++)
+			if(_board[x][y].getAffiliation() == c)
+			    ret++;
+	    }
+	return ret;
+    }
+
     public static void main(String [] args)
     {
 	Goban ban = new Goban();
@@ -416,6 +430,8 @@ public class Goban
 	ban.playStone(Affiliation.WHITE, 12, 11);
 	ban.paintTerritory();
 	System.out.println(ban.toString());
+	System.out.println(ban.countTerritory(Affiliation.WHITE, "Chinese"));
+	System.out.println(ban.countTerritory(Affiliation.BLACK, "Chinese"));
     }//passes tests so far
 
 }

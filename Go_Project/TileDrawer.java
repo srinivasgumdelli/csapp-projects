@@ -9,11 +9,11 @@ public class TileDrawer{
  	
  	Color brown = new Color(156, 93, 82);
  	
- 	Location[][] _board;
+ 	Goban _board;
 
-    public TileDrawer(Location[][] board) {
+    public TileDrawer(Goban board) {
     	_board = board;
-    	dimension = board.length;
+    	dimension = _board.getSize;
 
     }
     
