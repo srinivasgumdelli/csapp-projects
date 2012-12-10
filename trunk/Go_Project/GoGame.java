@@ -47,8 +47,8 @@ public class GoGame
 		if(_passes == 2)
 		    break;
 
-		//		if(x != 9001)
-		//  {
+		if(x != 9001)
+		    {
 			System.out.println("Enter Y coordinate");
 			y = sc.nextInt();
 			if(_turns%2 == 0)
@@ -69,7 +69,7 @@ public class GoGame
 				    legalMove = _board.playStone(Color.BLACK, x, y);
 				else
 				    legalMove = _board.playStone(Color.WHITE, x, y);   	
-				//	    }
+			    }
 		    }
 		_turns++;
 		System.out.println(_board.toString());    
