@@ -100,13 +100,13 @@ public class TileDrawer extends JFrame{
  			Graphics2D g2d = (Graphics2D)g;
 
  			g2d.setColor(brown);
- 		   	g2d.fillRect(50, 50, cellSpace*dimension, cellSpace*dimension);
+ 		   	g2d.fillRect(50, 50, cellSpace*(dimension-1)+StoneSize, cellSpace*(dimension-1)+StoneSize);
 
     		// drawing the lines
 	    	g2d.setColor(Color.DARK_GRAY);
-	    	for (int i = 0; i < dimension+1; i++){
-	    		g2d.drawLine(i*cellSpace+50, 50, 50+i*cellSpace, 50+dimension*cellSpace);
-	    		g2d.drawLine(50, i*cellSpace+50, 50+dimension*cellSpace, 50+i*cellSpace);
+	    	for (int i = 0; i < dimension; i++){
+	    		g2d.drawLine(i*cellSpace+50 +(cellSpace/2), 50 +(cellSpace/2), 50+i*cellSpace +(cellSpace/2), 50+(dimension-1)*cellSpace +(cellSpace/2));
+	    		g2d.drawLine(50 +(cellSpace/2), i*cellSpace+50 +(cellSpace/2), 50+(dimension-1)*cellSpace +(cellSpace/2), 50+i*cellSpace +(cellSpace/2));
 	    	}
 
 	    	for (int i = 0; i < stones.length - 1; i++){
