@@ -53,6 +53,15 @@ public class TileDrawer extends JFrame{
         	}
         });
 
+        JButton pass = new JButton("Pass");
+        btnPanel.add(pass);
+        pass.addActionListener(new ActionListener(){
+        	public void actionPerformed(ActionEvent e){
+        		turns++;
+        		requestFocus();
+        	}
+        });
+
         canvas = new DrawCanvas();
         canvas.setPreferredSize(new Dimension(500,500));
 
