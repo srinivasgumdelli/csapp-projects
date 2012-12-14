@@ -45,10 +45,16 @@ public class GoGame
 
     public void updateGui()
     {
+	Affiliation currentLocAff;
 	for(int j = _board.getSize(); j > 0; j--)
 	    for(int i = 1; i <= _board.getSize(); i++)
-		_gui.addStone(i, 1 + _board.getSize() - j, 
-			      _board.getLocation(i, j).getAffiliation()); 
+		{
+		    currentLocAff = _board.getLocation(i, j).getAffiliation();
+		    if(currentLocAff == Affiliation.WHITE || currentLocAff == Affiliation.BLACK)
+			{
+			    _gui.addStone(i, 1 + _board.getSize() - j, currentLocAff);
+			}
+		}
     }
 
     /**
