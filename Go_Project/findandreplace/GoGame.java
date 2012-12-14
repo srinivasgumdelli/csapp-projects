@@ -62,7 +62,6 @@ public class GoGame
      * false when the game is over.  Takes two ints as parameters, if either are
      * -1 it will interpret it as a pass.
      */
-
     public boolean makeMove(int x, int y)
     {
 	boolean ans = true;
@@ -77,8 +76,8 @@ public class GoGame
 		    currentPlayer = Affiliation.BLACK;
 		else
 		    currentPlayer = Affiliation.WHITE;
-		/*if(_heisen)
-		  {
+		if(_heisen)
+		    {
 			int loopCounter = 0;
 			int[] coord = {x, y};
 			int[] randomCoord = heisenfy(coord, false);
@@ -101,14 +100,14 @@ public class GoGame
 		    }
 		else
 		    {
-		*/
+		
 			legalMove = _board.playStone(currentPlayer, x, y);     	
 			if(legalMove)
 			    {
 				_passes = 0;
 				_turns++;
 			    }
-			//}
+		    }
 	    }
 	updateGui();
 	if(_passes == 2)
@@ -274,7 +273,10 @@ public class GoGame
 		System.out.println(_board.toString());    
 	    }
 	if(_passes == 2)
-	    System.out.println(endGame()); 
+	    {
+		System.out.println(endGame()); 
+		System.out.println(_board.toString());
+	    }
     }
 
     public String endGame()
@@ -283,12 +285,12 @@ public class GoGame
 	double whiteScore, blackScore;
 
 	_board.paintTerritory();
-	System.out.println(_board.toString());
+
 
 	blackScore = _board.countTerritory(Affiliation.BLACK, "Chinese");
 	whiteScore = _board.countTerritory(Affiliation.WHITE, "Chinese") + _komi;
 
-	ans  = String.format("Black: %.1f points  White: %.1f points\n", blackScore, whiteScore); 
+	ans  = String.format("Black: %.1f points  White: %.1f points   \n", blackScore, whiteScore); 
 
 	if(blackScore > whiteScore)
 	    ans += ("Black wins!");
