@@ -77,8 +77,8 @@ public class GoGame
 		    currentPlayer = Affiliation.BLACK;
 		else
 		    currentPlayer = Affiliation.WHITE;
-		if(_heisen)
-		    {
+		/*if(_heisen)
+		  {
 			int loopCounter = 0;
 			int[] coord = {x, y};
 			int[] randomCoord = heisenfy(coord, false);
@@ -101,13 +101,14 @@ public class GoGame
 		    }
 		else
 		    {
+		*/
 			legalMove = _board.playStone(currentPlayer, x, y);     	
 			if(legalMove)
 			    {
 				_passes = 0;
 				_turns++;
 			    }
-		    }
+			//}
 	    }
 	updateGui();
 	if(_passes == 2)
