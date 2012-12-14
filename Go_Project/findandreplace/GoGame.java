@@ -77,16 +77,39 @@ public class GoGame
 		    currentPlayer = Affiliation.BLACK;
 		else
 		    currentPlayer = Affiliation.WHITE;
-
-		legalMove = _board.playStone(currentPlayer, x, y);     	
-		if(legalMove)
+		if(_heisen)
 		    {
-			updateGui();
+			int loopCounter = 0;
+			int[] coord = {x, y};
+			int[] randomCoord = heisenfy(coord, false);
+			x = randomCoord[0];
+			y = randomCoord[1];
+			legalMove = _board.playStone(currentPlayer, x, y);
+			while(!legalMove)
+			    {
+				loopCounter++;
+				if(loopCounter < 1000)
+				    randomCoord = heisenfy(coord, false);
+				else
+				    randomCoord = heisenfy(coord, true);
+				x = randomCoord[0];
+				y = randomCoord[1];
+				legalMove = _board.playStone(currentPlayer, x, y);
+			    }
 			_passes = 0;
-			_turns++;
+			_turns++;;     	
+		    }
+		else
+		    {
+			legalMove = _board.playStone(currentPlayer, x, y);     	
+			if(legalMove)
+			    {
+				_passes = 0;
+				_turns++;
+			    }
 		    }
 	    }
-
+	updateGui();
 	if(_passes == 2)
 	    ans = false;
 	return ans;
