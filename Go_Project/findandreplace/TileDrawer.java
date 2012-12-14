@@ -75,13 +75,15 @@ public class TileDrawer extends JFrame{
 			    btnPanel.remove(ytext);
 			    btnPanel.remove(endTurn);
 			    btnPanel.remove(pass);
+
 			    String end = theGame.endGame();
+			    stones = new StoneList[361];
 			    theGame.updateGui();
 			    JLabel endMessage = new JLabel(end);
 			    btnPanel.add(endMessage);
 
-		    btnPanel.repaint();
-		    btnPanel.revalidate();
+			    btnPanel.repaint();
+			    btnPanel.revalidate();
 
 			}
 
