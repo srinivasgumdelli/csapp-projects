@@ -8,7 +8,7 @@ public class TileDrawer extends JFrame{
     private final int StoneSize = 20;
     private int dimension = 19;
 
-    private StoneList[] stones = new StoneList[100];
+    private StoneList[] stones = new StoneList[361];
     private int stoneCount = 0;
 
     private int turns = 0;
@@ -44,7 +44,8 @@ public class TileDrawer extends JFrame{
 		    if (!xtext.getText().isEmpty() && !ytext.getText().isEmpty()){
 			int x = (int)Double.parseDouble(xtext.getText());
 			int y = (int)Double.parseDouble(ytext.getText());
-			/*Affiliation tmp = (turns%2==0)? Affiliation.BLACK : Affiliation.WHITE;
+			Affiliation tmp = (turns%2==0)? Affiliation.BLACK : Affiliation.WHITE;
+			/*
 			  if (x > 0 && y > 0 && x <= dimension && y <= dimension){
 			  addStone(x,y,tmp);
 			  turns++;
@@ -52,7 +53,10 @@ public class TileDrawer extends JFrame{
 			
 			  }
 			*/
-			stones = new StoneList[100];
+			
+			stones = new StoneList[361];
+			stoneCount = 0;
+
 			theGame.makeMove(x, y);
 			canvas.repaint();
 			requestFocus();
@@ -63,6 +67,23 @@ public class TileDrawer extends JFrame{
 	final JButton pass = new JButton("Pass Turn");
 	pass.addActionListener(new ActionListener(){
 		public void actionPerformed(ActionEvent e){
+		    if(!theGame.makeMove(-1, -1))
+			{
+			    btnPanel.remove(xdesc);
+			    btnPanel.remove(xtext);
+			    btnPanel.remove(ydesc);
+			    btnPanel.remove(ytext);
+			    btnPanel.remove(endTurn);
+			    btnPanel.remove(pass);
+			    String end = theGame.endGame();
+			    theGame.updateGui();
+			    JLabel endMessage = new JLabel(end);
+			    btnPanel.add(endMessage);
+
+		    btnPanel.repaint();
+		    btnPanel.revalidate();
+
+			}
 
 		}
 	    });
@@ -167,7 +188,7 @@ public class TileDrawer extends JFrame{
 		g2d.drawLine(50 +(cellSpace/2), i*cellSpace+50 +(cellSpace/2), 50+(dimension-1)*cellSpace +(cellSpace/2), 50+i*cellSpace +(cellSpace/2));
 	    }
 
-	    for (int i = 0; i < stones.length - 1; i++){
+	    for (int i = 0; i < stones.length; i++){
 		if (stones[i] != null){
 		    switch(stones[i].getAffiliation()){
 		    case BLACK: g2d.setColor(Color.BLACK); break;
