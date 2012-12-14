@@ -8,9 +8,6 @@ public class GoGame
     private double _komi;
     private boolean _heisen;
 
-    private GameTreenode _current;
-    private GameTreenode _root;
-
     private TileDrawer _gui;
 
     private enum Korule
@@ -26,7 +23,6 @@ public class GoGame
 	_turns = 0;
 	_komi = 6.5;
 	_heisen = false;
-	_root = _current = new GameTreenode();
 	_ko = Korule.SIMPLE; //Ko rule set to simple by default
 
     }
@@ -99,12 +95,12 @@ public class GoGame
 				legalMove = _board.playStone(currentPlayer, x, y);
 			    }
 			_passes = 0;
-			_turns++;;     	
+			_turns++;;
 		    }
 		else
 		    {
-		
-			legalMove = _board.playStone(currentPlayer, x, y);     	
+
+			legalMove = _board.playStone(currentPlayer, x, y);
 			if(legalMove)
 			    {
 				_passes = 0;
@@ -119,9 +115,9 @@ public class GoGame
     }
 
     /**
-     * HeisenGo function to introduce randomness, takes in a array of 
-     * size 2 {x,y} and a boolean and returns a new array with randomized 
-     * cooordinates.  If the boolean value is true, it will eschew the normal 
+     * HeisenGo function to introduce randomness, takes in a array of
+     * size 2 {x,y} and a boolean and returns a new array with randomized
+     * cooordinates.  If the boolean value is true, it will eschew the normal
      * selection process and pick a totally random coordinate.  Boolean will be
      * set to true if is has been called too many times(see makeMove above).
      */
@@ -162,7 +158,7 @@ public class GoGame
 			dy = distance - dx;
 			if(Math.random() > 0.5)
 			    x = x + dx;
-			else 
+			else
 			    x = x - dx;
 			if(Math.random() > 0.5)
 			    y = y + dy;
@@ -172,7 +168,7 @@ public class GoGame
 	    }
 	ans[0] = x;
 	ans[1] = y;
-	return ans;				 			    
+	return ans;
     }
 
     public String endGame()
@@ -186,13 +182,13 @@ public class GoGame
 	blackScore = _board.countTerritory(Affiliation.BLACK, "Chinese");
 	whiteScore = _board.countTerritory(Affiliation.WHITE, "Chinese") + _komi;
 
-	ans  = String.format("Black: %.1f points  White: %.1f points   \n", blackScore, whiteScore); 
+	ans  = String.format("Black: %.1f points  White: %.1f points   \n", blackScore, whiteScore);
 
 	if(blackScore > whiteScore)
 	    ans += ("Black wins!");
 	else
-	    ans += ("White wins!");	  
-	return ans;  
+	    ans += ("White wins!");
+	return ans;
     }
 
     //Just a method we used to test things in text mode
@@ -212,11 +208,11 @@ public class GoGame
 		System.out.println("Enter X coodinate, enter -1 to quit and 0 to pass");
 		x = sc.nextInt();
 		if(x == 0)
-		    _passes++;		
+		    _passes++;
 		else if(x == -1)
 		    break;
 		else
-		    _passes = 0;		
+		    _passes = 0;
 
 		if(_passes == 2)
 		    break;
@@ -254,7 +250,7 @@ public class GoGame
 						dy = distance - dx;
 						if(Math.random() > 0.5)
 						    x = x + dx;
-						else 
+						else
 						    x = x - dx;
 						if(Math.random() > 0.5)
 						    y = y + dy;
@@ -275,11 +271,11 @@ public class GoGame
 				    legalMove = _board.playStone(Affiliation.BLACK, x, y);
 				else
 				    legalMove = _board.playStone(Affiliation.WHITE, x, y);
-		    
+
 				while(legalMove == false)
-				    {	    
+				    {
 					System.out.println("Illegal Move try again");
-				    
+
 					System.out.println("Enter X coodinate");
 					x = sc.nextInt();
 					if(x == 9000)
@@ -289,16 +285,16 @@ public class GoGame
 					if(_turns%2 == 0)
 					    legalMove = _board.playStone(Affiliation.BLACK, x, y);
 					else
-					    legalMove = _board.playStone(Affiliation.WHITE, x, y);   	
+					    legalMove = _board.playStone(Affiliation.WHITE, x, y);
 				    }
 			    }
 		    }
 		_turns++;
-		System.out.println(_board.toString());    
+		System.out.println(_board.toString());
 	    }
 	if(_passes == 2)
 	    {
-		System.out.println(endGame()); 
+		System.out.println(endGame());
 		System.out.println(_board.toString());
 	    }
     }
