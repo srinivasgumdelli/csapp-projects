@@ -69,7 +69,10 @@ public class GoGame
 	Affiliation currentPlayer;
 
 	if(x == -1 || y == -1)
-	    _passes++;
+	    {
+		_passes++;
+		_turns++;
+	    }
 	else
 	    {
 		if(_turns%2 == 0)
@@ -109,7 +112,7 @@ public class GoGame
 			    }
 		    }
 	    }
-	updateGui();
+
 	if(_passes == 2)
 	    ans = false;
 	return ans;
@@ -172,6 +175,27 @@ public class GoGame
 	return ans;				 			    
     }
 
+    public String endGame()
+    {
+	String ans;
+	double whiteScore, blackScore;
+
+	_board.paintTerritory();
+
+
+	blackScore = _board.countTerritory(Affiliation.BLACK, "Chinese");
+	whiteScore = _board.countTerritory(Affiliation.WHITE, "Chinese") + _komi;
+
+	ans  = String.format("Black: %.1f points  White: %.1f points   \n", blackScore, whiteScore); 
+
+	if(blackScore > whiteScore)
+	    ans += ("Black wins!");
+	else
+	    ans += ("White wins!");	  
+	return ans;  
+    }
+
+    //Just a method we used to test things in text mode
     public void go()
     {
 	System.out.println(_board.toString());
@@ -277,26 +301,6 @@ public class GoGame
 		System.out.println(endGame()); 
 		System.out.println(_board.toString());
 	    }
-    }
-
-    public String endGame()
-    {
-	String ans;
-	double whiteScore, blackScore;
-
-	_board.paintTerritory();
-
-
-	blackScore = _board.countTerritory(Affiliation.BLACK, "Chinese");
-	whiteScore = _board.countTerritory(Affiliation.WHITE, "Chinese") + _komi;
-
-	ans  = String.format("Black: %.1f points  White: %.1f points   \n", blackScore, whiteScore); 
-
-	if(blackScore > whiteScore)
-	    ans += ("Black wins!");
-	else
-	    ans += ("White wins!");	  
-	return ans;  
     }
 
     public static void main(String[] args)

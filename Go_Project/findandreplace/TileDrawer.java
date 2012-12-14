@@ -54,10 +54,11 @@ public class TileDrawer extends JFrame{
 			  }
 			*/
 			
+			
+			theGame.makeMove(x, y);
 			stones = new StoneList[361];
 			stoneCount = 0;
-
-			theGame.makeMove(x, y);
+			theGame.updateGui();
 			canvas.repaint();
 			requestFocus();
 		    }
@@ -78,6 +79,7 @@ public class TileDrawer extends JFrame{
 
 			    String end = theGame.endGame();
 			    stones = new StoneList[361];
+			    stoneCount = 0;
 			    theGame.updateGui();
 			    JLabel endMessage = new JLabel(end);
 			    btnPanel.add(endMessage);
@@ -159,7 +161,7 @@ public class TileDrawer extends JFrame{
     public void addStone(int x, int y, Affiliation aff){
 	if (stoneCount > stones.length - 2){
 	    StoneList[] tmp = new StoneList[stones.length*2];
-	    for (int i = 0; i < stones.length - 1; i++)
+	    for (int i = 0; i < stones.length; i++)
 		tmp[i] = stones[i];
 	    stones = tmp;
 	}
