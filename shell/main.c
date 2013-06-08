@@ -29,11 +29,11 @@ int main(){
     cmds = separate_cmds(input);
     if (cmds){
       for (cmd_p = cmds; *cmd_p; cmd_p++){
-	args = separate_args(*cmd_p);
-	if (args){
-	  exec_cmd(args, cmds);
-	  free_strlist(args);
-	}
+		args = separate_args(*cmd_p);
+		if (args){
+		exec_cmd(args, cmds);
+		free_strlist(args);
+		}
       }
       free_strlist(cmds);
     }
