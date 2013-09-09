@@ -15,6 +15,7 @@
 #define POUNDS2KG		0.4535924
 #define POUND2TON		2240
 #define SqFEET2SqMETRES	0.0992903
+#define YARDS2FEET		3
 
 float PI(){
 	return 4*atan(1);
