@@ -5,6 +5,8 @@
 
 #include <cmath>
 #include <iostream>
+#include <iomanip>
+#include <time.h>
 
 #define G 9.80665
 
@@ -26,6 +28,10 @@ float toRadians(float a){
 	return a * PI() / 180.0;
 }
 
+float toDegrees(float a){
+    return a * 180.0 / PI();
+}
+
 float densityH(float h){
 	// Air Pressure at Height H		p(h) = p0 * (1 - Lh/T0)^(gM/RL)
 	// Temperature at Height H 		T = To - Lh
@@ -34,10 +40,10 @@ float densityH(float h){
 	// R = 8.31447 J/(mol*k)		M = 0.0289644 kg/mol
 	// Density at height H			rho = pM/RT
 
-	float p = 101.325 * pow(1 - 0.0065*h/288.15, G*0.53594054);
+	float p = 101.325 * pow(1 - 0.0065 * h / 288.15, G * 0.0289644 / (8.31447 * 0.0065));
 	float T = 288.15 - 0.0065*h;
 
-	return p * 0.0289644 / (8.31447 * T);
+	return p * 0.0289644 / (8.31447 * T) * 1000;
 }
 
 float drag ( float Cd, float rho, float A, float V, float m){
@@ -66,15 +72,38 @@ float parBallistics(float timeStep, shell &Obj){
 }
 
 int main(){
-	shell Mark8 { 203, 1224.7, 0.27, toRadians(45), 762.2, 0.1 };   // 16"/50 Mark 7 AP Mark 8
+    /*
+    std::cout << "Enter the details in the following order" << std::endl;
+    std::count << "Diameter, Mass, Cd, angle (Rads), muzzle velocity, height" << std::endl;
+    */
 
-	float step = 1000.0;				                            // the scale, 1000 = by milliseconds
-	float distance = 0.0;
+    clock_t begin, end;
+    begin = clock();
 
-	for(int i = 0; Mark8.h > 0; i++)
-		distance += ballistics(i/step, Mark8);
+	shell Mark8 { 0.203, 1224.7, 0.35, toRadians(45), 762.2, 0.1 };   // 16"/50 Mark 7 AP Mark 8
 
-	std::cout << distance << std::endl;
+	float step = 1000000.0;				                            // the scale, 1000 = by milliseconds
 
-	delete &Mark8;
+	std::cout << std::setprecision(2) << std::fixed;
+
+    for(float theta = 0; theta <= 45; theta += 5){
+        Mark8.angle = toRadians(theta);
+        Mark8.V     = 762.2;
+        Mark8.h     = 0.1;
+
+        float distance = 0.0;
+
+        for(int i = 0; Mark8.h > 0; i++)
+            distance += ballistics(i/step, Mark8);
+
+        std::cout << theta << " degrees\t" << distance << " m\t" << Mark8.V << " mps\t" << toDegrees(Mark8.angle) << " degrees" << std::endl;
+    }
+
+    end = clock();
+    std::cout << "Steps: " << step << "\tTime Spent: " << (double)(end - begin) / (CLOCKS_PER_SEC/1000) << std::endl;
+
+    delete &Mark8;
+
+	char hold;
+	std::cin >> hold;
 }
