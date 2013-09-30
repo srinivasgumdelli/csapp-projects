@@ -5,22 +5,34 @@ Maze::Maze() : row(0), col(0) {
 
 Maze::Maze(const char *filename){
 	char	a;
-	fstream	input(filename, ios::in);
+	ifstream	input(filename);
 	
-	cells = new int[1][1];
+	cells = new int*[1];
+	for (int i = 0; i < 1; i++)
+		cells[i] = new int[1];
+
 	row = 1;
 	col = 1;
+
+	cout << "Created Base Array" << endl;
 	
-	int curRow;
-	int curCol;
-	while(input >> a){
-		if(curRow > row || curCol > col)
+	int curRow = 0;
+	int curCol = 0;
+	while(input.get(a)){
+		//cout << "Check for Resize" << endl;
+		if(curRow >= row || curCol >= col)
 			resize(row*2, col*2);
+		
+		//cout << "Deciphering Text" << endl;
+		//cout << a << " ";
+
+		if (a == '\n'){
+			curRow++;
+			curCol = 0;
+			continue;
+		}
+
 		switch(a){
-			case '\n':
-				curRow++;
-				curCol = 0;
-				continue;
 			case '%':
 				cells[curRow][curCol] = WALL;
 				break;
@@ -33,8 +45,8 @@ Maze::Maze(const char *filename){
 			case '.':
 				cells[curRow][curCol] = END;
 				break;
-			default:
-				cells[curRow][curCol] = WALL;
+			//default:		// Default does nothing, don't want to create walls on Windows style '\r\n's '\n'
+				//cells[curRow][curCol] = WALL;
 		}
 			
 		curCol++;
@@ -42,19 +54,31 @@ Maze::Maze(const char *filename){
 	
 	input.close();
 	input.clear();
+
+	cout << "Trimming from " << row << ", " << col;
 	
 	trim();
+
+	cout << " to " << row << ", " << col << endl;
+
+	cout << "Correctly read file in Maze Array" << endl;
 }
 
 void Maze::resize(int newRow, int newCol){
 	if(row < 1 || col < 1){
 		delete cells;
-		cells = new int[1][1];
+		cells = new int*[1];
+		for (int i = 0; i < 1; i++)
+			cells[i] = new int[1];
+
 		row = col = 1;
 		return;
 	}
 	
-	int **tmp = new int[newRow][newCol];
+	int **tmp = new int*[newRow];
+	for (int i = 0; i < newCol; i++)
+		tmp[i] = new int[newCol];
+
 	for(int i = 0; i < newRow; i++){
 		for(int j = 0; j < newCol; j++){
 			if (i < row && j < col)
@@ -77,9 +101,12 @@ void Maze::trim(){
 	
 	for(int i = 0; i < row; i++){
 		for(int j = 0; j < col; j++){
-			if( cells[i][j] = -1){
-				maxRow < i ? maxRow = i : ;
-				maxCol < j ? maxCol = j : ;
+			if( cells[i][j] == -1){
+				if (maxRow < i)
+					maxRow = i;
+				if (maxCol < j)
+					maxCol = j;
+
 				cells[i][j] = WALL;
 			}
 		}
@@ -94,7 +121,7 @@ Maze::~Maze(){
 	col = 0;
 }
 
-const Maze& operator=(const Maze &source){
+/*const Maze& operator=(const Maze &source){
 	delete[] cells;
 	cells 	= new int[source->row][source->col];
 	row 	= source->row;
@@ -103,4 +130,4 @@ const Maze& operator=(const Maze &source){
 	for(int r = 0; r < row; r++)
 		for(int c = 0; c < col; c++)
 			cells[r][c] = source.cells[r][c];
-}
+}*/
