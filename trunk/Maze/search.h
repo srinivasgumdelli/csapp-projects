@@ -1,8 +1,9 @@
 #ifndef SEARCH_H
 #define	SEARCH_H
 
-#include "maze.h"
+#include "io.h"
 #include "tree.h"
+#include <cstdlib>
 #include <queue>
 #include <stack>
 #include <assert.h>
@@ -30,9 +31,13 @@ using namespace std;
   *	Maximum size of the frontier
   */
   
-Tree dfs(Tree &src);
-Tree bfs(Tree &src);
-Tree gbfs(Tree &src);
-Tree a_star(Tree &src);
+Node *dfs(Tree &src);
+Node *bfs(Tree &src);
+Node *gbfs(Tree &src);
+Node *a_star(Tree &src);
+
+Node *findEnd(Tree &src);
+Node *minNode(Node *cur, Node *end);
+unsigned int mDist(Node *cur, Node *end);
 
 #endif	// SEARCH_H
