@@ -9,61 +9,41 @@
  * Insert the next DIRECTION node as child, if the checkParent function returns false
  */
 Tree::Tree(Maze &src){
-	unsigned int sR = src.startPosition();
-	unsigned int sC	= sR & 0x00ff;
-	sR				= sR & 0xff00;
+	coords *tmp 		= src.startPosition();
+	int sR = tmp->x;
+	int sC	= tmp->y;
+	depth = 0;
 
-	cout << "Deciphered Starting Position in Array, (" << sR << ", " << sC << ")" << endl;
+	cout << "Deciphered Starting Position in Array, (" << sR+1 << ", " << sC+1 << ")" << endl;
 	
-	root 		= new Node(src.cells[sR][sC]);
-	root->r 	= sR;
-	root->c 	= sC;
+	root 		= new Node(src.cells[sR][sC], sR, sC);
 	
 	cout << "Created Root Node" << endl;
 
 	createTree(src, root);
 
-	cout << "Correctly created Tree from Maze Array" << endl;
+	cout << "Created Tree with depth " << depth << " from Maze Array" << endl << endl;
 }
 
 /* Recursive Helper Function called by the constructor
  * Depth-Based Recursion
  */
 void Tree::createTree(Maze &src, Node *cur){
-	if (cur)
+	if(cur == NULL)
 		return;
 
-	//cout << "Creating North Child" << endl;
-	if (cur->r > 0 && cur->c < src.col-1 && !checkParent(cur, cur->r-1, cur->c)){
-		cur->north		= new Node(src.cells[cur->r-1][cur->c]);
-		cur->north->r 	= cur->r-1;
-		cur->north->c 	= cur->c;
-		createTree(src, cur->north);
-	}
+	Node* tmpN = NULL;
+	Node* tmpE = NULL;
+	Node* tmpS = NULL;
+	Node* tmpW = NULL;
 
-	//cout << "Creating East Child" << endl;	
-	if (cur->c+1 < src.row && cur->r < src.row-1 && !checkParent(cur, cur->r, cur->c+1)){
-		cur->east		= new Node(src.cells[cur->r][cur->c+1]);
-		cur->east->r 	= cur->r;
-		cur->east->c 	= cur->c+1;
-		createTree(src, cur->east);
-	}
+	tmpN = src.cells[sR-1][sC];
+	tmpE = src.cells[sR][sC+1];
+	tmpS = src.cells[sR+1][sC];
+	tmpW = src.cells[sR][sC-1];
+
+
 	
-	//cout << "Creating South Child" << endl;
-	if (cur->r+1 < src.col && cur->c < src.col-1 && !checkParent(cur, cur->r+1, cur->c)){
-		cur->south	= new Node(src.cells[cur->r+1][cur->c]);
-		cur->south->r = cur->r+1;
-		cur->south->c = cur->c;
-		createTree(src, cur->south);
-	}
-	
-	//cout << "Creating West Child" << endl;
-	if (cur->c > 0 && cur->r < src.row-1 && !checkParent(cur, cur->r, cur->c-1)){
-		cur->west	= new Node(src.cells[cur->r][cur->c-1]);
-		cur->west->r = cur->r;
-		cur->west->c = cur->c-1;
-		createTree(src, cur->west);
-	}
 	
 }
 
@@ -105,13 +85,42 @@ void Tree::remove(Node *cur){
 }
 
 // Default constructor for Node class
-Node::Node(int val){
-	state 	= val;
+Node::Node(int val, int _r, int _c) : state(val), r(_r), c(_c) {
 	parent 	= NULL;
 	north	= NULL;
 	east	= NULL;
 	south	= NULL;
 	west	= NULL;
-	r		= 01;
-	c		= -1;
+}
+
+void Tree::printTree(){
+	if(!root) return;
+	queue<Node *> cur;
+	queue<int> level;
+	cur.push(root);
+	int plev = 1;
+	level.push(plev);
+	while(!cur.empty()){
+		int clev = level.front();
+		level.pop();
+		if(plev < clev){
+			cout << endl;
+			plev = clev;
+		}
+		Node *p = cur.front();
+		cout << p->state;
+		
+		cur.push(p->north);
+		level.push(clev+1);
+
+		cur.push(p->east);
+		level.push(clev+1);
+
+		cur.push(p->south);
+		level.push(clev+1);
+
+		cur.push(p->west);
+		level.push(clev+1);
+	}
+	cout << endl;
 }
