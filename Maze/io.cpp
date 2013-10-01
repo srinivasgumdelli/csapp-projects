@@ -14,16 +14,14 @@ Maze::Maze(const char *filename){
 	row = 1;
 	col = 1;
 
-	cout << "Created Base Array" << endl;
+	cout << "Created Base Array and Deciphering Text" << endl;
 	
 	int curRow = 0;
 	int curCol = 0;
 	while(input.get(a)){
-		//cout << "Check for Resize" << endl;
 		if(curRow >= row || curCol >= col)
 			resize(row*2, col*2);
 		
-		//cout << "Deciphering Text" << endl;
 		//cout << a << " ";
 
 		if (a == '\n'){
@@ -61,20 +59,18 @@ Maze::Maze(const char *filename){
 
 	cout << " to " << row << ", " << col << endl;
 
-	cout << "Correctly read file in Maze Array" << endl;
+	cout << "Finished Reading File into Maze Array" << endl << endl;
+}
+
+void Maze::output(){
+	for(int i = 0; i < row; i++){
+		for(int j = 0; j < col; j++)
+			cout << cells[i][j];
+		cout << endl;
+	}
 }
 
 void Maze::resize(int newRow, int newCol){
-	if(row < 1 || col < 1){
-		delete cells;
-		cells = new int*[1];
-		for (int i = 0; i < 1; i++)
-			cells[i] = new int[1];
-
-		row = col = 1;
-		return;
-	}
-	
 	int **tmp = new int*[newRow];
 	for (int i = 0; i < newCol; i++)
 		tmp[i] = new int[newCol];
@@ -84,41 +80,43 @@ void Maze::resize(int newRow, int newCol){
 			if (i < row && j < col)
 				tmp[i][j] = cells[i][j];
 			else
-				tmp[i][j] = -1;
+				tmp[i][j] = 9;
 		}
 	}
 	
-	delete[] cells;
+	remove();
 	cells 	= tmp;
 	tmp 	= NULL;
 	row		= newRow;
 	col		= newCol;
 }
 
-// Trims the maze to best fit size and fills empty border cells with wall state
+// Trims the maze to best fit size
 void Maze::trim(){
 	int maxRow = 0, maxCol = 0;
 	
 	for(int i = 0; i < row; i++){
 		for(int j = 0; j < col; j++){
-			if( cells[i][j] == -1){
-				if (maxRow < i)
-					maxRow = i;
-				if (maxCol < j)
-					maxCol = j;
-
+			if(cells[i][j] != 9){
+				maxRow = i;
+				maxCol = j;
+			}else
 				cells[i][j] = WALL;
-			}
 		}
 	}
 	
-	resize(maxRow, maxCol);
+	resize(maxRow+1, maxCol+1);
 };
 
 Maze::~Maze(){
+	remove();
+}
+
+void Maze::remove(){
 	delete[] cells;
-	row = 0;
-	col = 0;
+	cells 	= NULL;
+	row 	= 0;
+	col 	= 0;
 }
 
 /*const Maze& operator=(const Maze &source){
@@ -131,3 +129,19 @@ Maze::~Maze(){
 		for(int c = 0; c < col; c++)
 			cells[r][c] = source.cells[r][c];
 }*/
+
+coords *Maze::startPosition(){
+	coords *sP = new coords();
+	sP->x = -1;
+	sP->y = -1;
+	for(int r = 0; r < row; r++){
+		for(int c = 0; c < col; c++){
+			if (cells[r][c] == START){
+				sP->x = r;
+				sP->y = c;
+				break;
+			}
+		}
+	}
+	return sP;
+}

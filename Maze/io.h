@@ -7,7 +7,12 @@
 using namespace std;
 
 //enum NODEINFO { OPEN, WALL, EXPLORED, START, END };
-enum { OPEN, WALL, EXPLORED, START, END };
+enum { OPEN = 0, WALL, START, END };
+
+typedef struct{
+	int x;
+	int y;
+} coords;
 
 // Converts a txt file into an array containing the whole map
 class Maze{
@@ -23,15 +28,12 @@ class Maze{
 		
 		// Assignment Operator
 		//const Maze &operator=(const Maze &source);
+
+		// Prints the array to terminal
+		void output();
 		
 		// Returns coordinates in 1 int as xxxxyyyy format
-		inline int startPosition(){
-			for(unsigned long r = 0; r < row; r++)
-				for(unsigned long c = 0; c < col; c++)
-					if (cells[r][c] == START)
-						return (r << 4) + c;
-			return -1;
-		}
+		coords *startPosition();
 		
 		int **cells;
 		size_t	col;
@@ -40,6 +42,7 @@ class Maze{
 	private:
 		void resize(int newRow, int newCol);
 		void trim();
+		void remove();
 };
  
 #endif	// IO_H

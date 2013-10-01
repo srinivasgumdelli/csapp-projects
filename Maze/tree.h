@@ -4,12 +4,14 @@
 #include "io.h"
 #include <iostream>
 
+#include <queue>
+
 using namespace std;
 
 // A node in the tree has 4 children (1 for each direction), a parent node and an enum value for whether it is the start or end
 class Node{
 	public:	
-		Node(int val);
+		Node(int val, int _r, int _c);
 				
 		Node *parent;
 		Node *north;
@@ -27,8 +29,10 @@ class Tree{
 		~Tree();
 
 		unsigned int pathLength(Node *cur);
+		void printTree();
 
 		Node *root;
+		int depth;
 		
 	private:
 		void createTree(Maze &src, Node *cur);
