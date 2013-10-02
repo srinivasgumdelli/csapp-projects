@@ -6,7 +6,6 @@
 
 using namespace std;
 
-//enum NODEINFO { OPEN, WALL, EXPLORED, START, END };
 enum { OPEN = 0, WALL, START, END };
 
 typedef struct{
@@ -20,19 +19,16 @@ class Maze{
 		// Default Constructor
 		Maze();
 		
-		// Construct from file
+		// Construct from file given
 		Maze(const char *filename);	
 		
-		// Destructor, 
+		// Destructor
 		~Maze();
-		
-		// Assignment Operator
-		//const Maze &operator=(const Maze &source);
 
 		// Prints the array to terminal
 		void output();
 		
-		// Returns coordinates in 1 int as xxxxyyyy format
+		// Returns coordinates a coords struct
 		coords *startPosition();
 		
 		int **cells;
@@ -40,8 +36,12 @@ class Maze{
 		size_t	row;
 		
 	private:
+		// Resizes the array to the new dimensions
 		void resize(int newRow, int newCol);
+
+		// Trims the maze to best fit size
 		void trim();
+
 		void remove();
 };
  

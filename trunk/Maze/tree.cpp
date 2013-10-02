@@ -1,65 +1,83 @@
 #include "tree.h"
 
-/* Creates a Tree Array from a given Maze Array
- * If Cell not an element of Tree
- * Then cellNeighbor.child = cell;
- * cellNeighbor an element of Tree
- *
- * A Depth-First Adding Method
- * Insert the next DIRECTION node as child, if the checkParent function returns false
- */
 Tree::Tree(Maze &src){
-	coords *tmp 		= src.startPosition();
-	int sR = tmp->x;
-	int sC	= tmp->y;
-	depth = 0;
+	expanded 	= 0;
+	maxSize		= 0;
 
-	cout << "Deciphered Starting Position in Array, (" << sR+1 << ", " << sC+1 << ")" << endl;
+	coords *tmp = src.startPosition();
+	int sR 		= tmp->x;
+	int sC		= tmp->y;
+
+	cout << "Deciphered Starting Position, " << src.cells[sR][sC] << ", in Array (" << sR+1 << ", " << sC+1 << ")" << endl;
 	
-	root 		= new Node(src.cells[sR][sC], sR, sC);
+	root = new Node(NULL, src.cells[sR][sC], sR, sC);
 	
 	cout << "Created Root Node" << endl;
 
 	createTree(src, root);
 
-	cout << "Created Tree with depth " << depth << " from Maze Array" << endl << endl;
+	cout << "Created Tree" << endl << endl;
 }
 
-/* Recursive Helper Function called by the constructor
- * Depth-Based Recursion
- */
 void Tree::createTree(Maze &src, Node *cur){
 	if(cur == NULL)
 		return;
+
+	int r = cur->r;
+	int c = cur->c;
 
 	Node* tmpN = NULL;
 	Node* tmpE = NULL;
 	Node* tmpS = NULL;
 	Node* tmpW = NULL;
 
-	tmpN = src.cells[sR-1][sC];
-	tmpE = src.cells[sR][sC+1];
-	tmpS = src.cells[sR+1][sC];
-	tmpW = src.cells[sR][sC-1];
+	if (r-1 >= 0 && !checkParent(cur, r-1, c))
+		tmpN = new Node(cur, src.cells[r-1][c], r-1, c);
+	if (c+1 < src.col && !checkParent(cur, r, c+1))
+		tmpE = new Node(cur, src.cells[r][c+1], r, c+1);
+	if (r+1 < src.row && !checkParent(cur, r+1, c))
+		tmpS = new Node(cur, src.cells[r+1][c], r+1, c);
+	if (c-1 >= 0 && !checkParent(cur, r, c-1))
+		tmpW = new Node(cur, src.cells[r][c-1], r, c-1);
 
+	/*if (tmpN != NULL && tmpN->state != WALL)
+		cout << tmpN << " " << tmpN->state << " (" << tmpN->r+1 << ", " << tmpN->c+1 << ")" << endl;
+	if (tmpE != NULL && tmpE->state != WALL)
+		cout << tmpE << " " << tmpE->state << " (" << tmpE->r+1 << ", " << tmpE->c+1 << ")" << endl;
+	if (tmpS != NULL && tmpS->state != WALL)
+		cout << tmpS << " " << tmpS->state << " (" << tmpS->r+1 << ", " << tmpS->c+1 << ")" << endl;
+	if (tmpW != NULL && tmpW->state != WALL)
+		cout << tmpW << " " << tmpW->state << " (" << tmpW->r+1 << ", " << tmpW->c+1 << ")" << endl;
+	cout << endl;*/
 
-	
-	
+	if (tmpN != NULL && tmpN->state != WALL){
+		cur->north = tmpN;
+		createTree(src, tmpN);
+	}
+	if (tmpE != NULL && tmpE->state != WALL){
+		cur->east = tmpE;
+		createTree(src, tmpE);
+	}
+	if (tmpS != NULL && tmpS->state != WALL){
+		cur->south = tmpS;
+		createTree(src, tmpS);
+	}
+	if (tmpW != NULL && tmpW->state != WALL){
+		cur->west = tmpW;
+		createTree(src, tmpW);
+	}
 }
 
-/* Checks if the given node is in a parent (direct and indirect) node
- * This check prevents infinite loops in constructing the tree
- * Checks by coordinates
- */
 bool Tree::checkParent(Node *cur, int tr, int tc){
-	if (cur == NULL) return false;
-	if (cur->r == tr && cur->c == tc) return true;
+	if (cur == NULL)
+		return false;
+	if (cur->r == tr && cur->c == tc)
+		return true;
 	return checkParent(cur->parent, tr, tc);
 }
 
-// Returns the length of the path from the given node and the root node
 unsigned int Tree::pathLength(Node *cur){
-	if (cur == root) return 0;
+	if (cur == NULL || cur == root || cur->parent == NULL) return 0;
 	return 1 + pathLength(cur->parent);
 }
 
@@ -84,43 +102,22 @@ void Tree::remove(Node *cur){
 	cur = NULL;
 }
 
-// Default constructor for Node class
-Node::Node(int val, int _r, int _c) : state(val), r(_r), c(_c) {
-	parent 	= NULL;
+Node::Node(Node * par, int val, int _r, int _c) : parent(par), state(val), r(_r), c(_c) {
 	north	= NULL;
 	east	= NULL;
 	south	= NULL;
 	west	= NULL;
+	visited = false;
 }
 
-void Tree::printTree(){
-	if(!root) return;
-	queue<Node *> cur;
-	queue<int> level;
-	cur.push(root);
-	int plev = 1;
-	level.push(plev);
-	while(!cur.empty()){
-		int clev = level.front();
-		level.pop();
-		if(plev < clev){
-			cout << endl;
-			plev = clev;
-		}
-		Node *p = cur.front();
-		cout << p->state;
-		
-		cur.push(p->north);
-		level.push(clev+1);
-
-		cur.push(p->east);
-		level.push(clev+1);
-
-		cur.push(p->south);
-		level.push(clev+1);
-
-		cur.push(p->west);
-		level.push(clev+1);
-	}
-	cout << endl;
+Node::~Node(){
+	parent	= NULL;
+	north	= NULL;
+	east	= NULL;
+	south	= NULL;
+	west	= NULL;
+	r		= 0;
+	c 		= 0;
+	visited = false;
+	state	= WALL;
 }
