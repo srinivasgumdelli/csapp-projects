@@ -91,7 +91,6 @@ void Maze::resize(int newRow, int newCol){
 	col		= newCol;
 }
 
-// Trims the maze to best fit size
 void Maze::trim(){
 	int maxRow = 0, maxCol = 0;
 	
@@ -118,17 +117,6 @@ void Maze::remove(){
 	row 	= 0;
 	col 	= 0;
 }
-
-/*const Maze& operator=(const Maze &source){
-	delete[] cells;
-	cells 	= new int[source->row][source->col];
-	row 	= source->row;
-	col 	= source->col;
-	
-	for(int r = 0; r < row; r++)
-		for(int c = 0; c < col; c++)
-			cells[r][c] = source.cells[r][c];
-}*/
 
 coords *Maze::startPosition(){
 	coords *sP = new coords();
