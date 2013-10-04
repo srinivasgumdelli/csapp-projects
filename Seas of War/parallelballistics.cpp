@@ -118,7 +118,7 @@ int main(){
     std::count << "Diameter, Mass, Cd, angle (Rads), muzzle velocity, height" << std::endl;
     */
 	string input = "";
-	float diameter, weight, cd, mV, L, year, inc;
+	float diameter, weight, cd, mV, L, year, inc, mA;
 
 	int mode;
 	cout << "In mode 1, the table printed is in elevation increments. In mode 2, the table is printed in range increments." << endl;
@@ -160,6 +160,11 @@ int main(){
 	getline(cin, input);
 	stringstream cdStream(input);
 	assert(cdStream >> cd);
+
+	cout << "Enter the max angle in degrees:\n";
+	getline(cin, input);
+	stringstream mAStream(input);
+	assert(mAStream >> mA);
 	cout << endl;
 
 	/*cout << "Enter the muzzle velocity (mps):\n";
@@ -167,11 +172,14 @@ int main(){
 	cout << endl;
 	stringstream mvStream(input);
 	assert(mvStream >> mV);*/
+	
+	clock_t start, stop;
+	start = clock();
 
 	shell Obj { diameter, weight, cd, 0.300, 0.0, mV, 0.1, 0.0 };
 	float step = 1000000.0;
 	cout << setprecision(2) << fixed;
-	for(float t = 0; t <= 45; t += 0.05){
+	for(float t = 0; t <= mA; t += 0.05){
 		Obj.angle 	= toRadians(t);
 		Obj.V		= mV;
 		Obj.h		= 0.1;
@@ -194,8 +202,11 @@ int main(){
                 break;
         }
 	}
-
+	
 	delete &Obj;
+	stop = clock();
+	
+	cout << "Time spent: " << (double)(stop-start)/(CLOCKS_PER_SEC/1000) << " ms" << endl;
 
     /*clock_t begin, end, start, stop;
     begin = clock();
