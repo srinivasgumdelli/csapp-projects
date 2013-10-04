@@ -1,0 +1,19 @@
+0.3a <- 0.2a
+
+- Added Torpedo Bulkhead Armor Input and Output
+- Corrected Lcm for Torpedo Bulkhead Volume
+- Superstructure weight based on 80% Beam rather than 100% Beam
+- Add distance to LCG/LCB/Deck Armor outputs
+- Add belt slope in degrees to output
+- Additional terms in Nomenclature to reduce confusion
+**Lcm difference on different engine types
+**Add ability to simulate protected decks (sloped)
+
+0.1a -> 0.2a
+
+- README created
+- Reduced clutter in input I/O by redirecting explanations of nomenclature to README
+- Simplified Output
+- Added Belt Armor Input and Output
+- Added Deck Armor Input and Output
+- Corrected Lcm for different hull forms
