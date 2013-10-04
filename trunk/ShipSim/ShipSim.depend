@@ -1,0 +1,23 @@
+# depslib dependency file v1.0
+1380142822 source:c:\csapp-projects\shipsim\main.cpp
+	"shipsim.h"
+	<iostream>
+	<string>
+
+1380233030 c:\csapp-projects\shipsim\shipsim.h
+	<iostream>
+	<iomanip>
+	<cmath>
+	<algorithm>
+	<fstream>
+	<cstring>
+	"enumparser.h"
+
+1380085871 c:\csapp-projects\shipsim\enumparser.h
+	<map>
+	<string>
+	<vector>
+
+1380099863 source:c:\csapp-projects\shipsim\shipsim.cpp
+	"shipsim.h"
+
