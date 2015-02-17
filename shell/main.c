@@ -10,7 +10,7 @@
 
 int main(){
   // called at the start of shell, manages all other shell commands
-  
+
   printf("\nWelcome to GoodShell!\nTotally not a ripoff of Bash.\n\n");
 
   chdir(home() );
@@ -24,16 +24,16 @@ int main(){
 
     // gets the command line argument
     read_line(input);
-  		
+
     // seperates commands
     cmds = separate_cmds(input);
     if (cmds){
       for (cmd_p = cmds; *cmd_p; cmd_p++){
-		args = separate_args(*cmd_p);
-		if (args){
-		exec_cmd(args, cmds);
-		free_strlist(args);
-		}
+    		args = separate_args(*cmd_p);
+    		if (args){
+      		exec_cmd(args, cmds);
+      		free_strlist(args);
+    		}
       }
       free_strlist(cmds);
     }

@@ -29,25 +29,24 @@ void exec_helper(char **current_p, char **args, char **cmds){
   for (p = current_p; *p; p++){
     for (i = 0; i < 5; i++){
       if (!strcmp(*p, OPERATORS[i]) ){
-	free(*p);
-	*p = NULL;
+      	free(*p);
+      	*p = NULL;
 
-	redirects = realloc(redirects, (size+1) * sizeof(*redirects) );
-	redirects[size++] = (*FUNC_PTRS[i])(*(p+1) );
+      	redirects = realloc(redirects, (size+1) * sizeof(*redirects) );
+      	redirects[size++] = (*FUNC_PTRS[i])(*(p+1) );
 
-	free(*(p+1) );
-	*(++p) = NULL;
-	break;
-      }
-      else if (!strcmp(*p, "|") ){
-	free(*p);
-	*p = NULL;
+      	free(*(p+1) );
+      	*(++p) = NULL;
+      	break;
+      } else if (!strcmp(*p, "|") ){
+      	free(*p);
+      	*p = NULL;
 
-	int fds[2];
-	pipe_io(fds);
+      	int fds[2];
+      	pipe_io(fds);
 
-	p++;
-	break;
+      	p++;
+      	break;
       }
     }
   }
