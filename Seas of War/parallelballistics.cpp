@@ -15,11 +15,11 @@
 
 using namespace std;
 
-#define G 9.80665
-#define M2IN 39.3701
-#define M2FT 3.28084
-#define KGM32LBIN3 0.000036
-#define KG2LB 2.20462
+const float G 			= 9.80665;
+const float M2IN 		= 39.3701;
+const float M2FT 		= 3.28084;
+const float KGM32LBIN3 	= 0.000036;
+const float KG2LB 		= 2.20462;
 
 typedef struct {
 	float const r;
