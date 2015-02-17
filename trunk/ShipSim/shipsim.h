@@ -10,22 +10,12 @@
 
 #include "enumparser.h"
 #include "gun.h"
+#include "main.h"
 
 #define SHAFTSIZE 3
 #define ENGINESIZE 6
 
 using namespace std;
-
-const float IN2CM			= 2.54;
-const float KG2LB			= 2.20462;
-const float ST2MT			= 0.907185;
-const float KW2HP	        = 0.7355;
-const float M2FT	        = 3.24084;
-const float KN2MS	        = 0.51444;
-const float G	        	= 9.80665;
-const float NUr		        = 1.01;
-const float NUg		        = 0.99;
-const float STEELDENSITY    = 7.86;
 
 typedef struct {
 	float Lpp;
@@ -93,17 +83,9 @@ inline EngineType find(EngineType *et, Engin e){
     }
 }
 
-inline float PI(){
-	return 4*atan(1);
-}
-
-inline float DEGREE_RADIANS(float degrees){
-	return degrees * PI() / 180.0;
-}
-
 class Ship{
 	public:
-		Ship(vitalParams x, engineParams y, armorParams z, gunParams w, bool _db, bool _par);
+		Ship(vitalParams x, engineParams y, armorParams z, gunParams w, bool _db, bool _par, battery _b);
 
 		Ship(const Ship &src);
 		const Ship& operator=(const Ship &src);

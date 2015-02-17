@@ -15,12 +15,14 @@ EngineType et[] = {
 	{ SteamTur, 5., 0.54, 1.1 }
 };
 
-Ship::Ship(vitalParams x, engineParams y, armorParams z, bool _db, bool _par){
+Ship::Ship(vitalParams x, engineParams y, armorParams z, bool _db, bool _par, battery _b){
 	v	= x;
 	e	= y;
 	arm	= z;
     DB	= _db;
     PAR	= _par;
+	// add linked list copying for battery
+	b	= _b;
 }
 
 Ship::Ship(const Ship &src) {
@@ -39,6 +41,8 @@ void Ship::copyS(const Ship &src){
 	arm	= src.arm;
     DB	= src.DB;
     PAR	= src.PAR;
+	// add linked list copying for battery
+	b	= _b;
 }
 
 void Ship::output(){

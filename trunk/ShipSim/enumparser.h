@@ -39,9 +39,9 @@ extern EngineType Engine[];
 
 template <>
 inline EnumParser<Placement>::Enumparser(){
-	enumMap["Forward"] 	= f;
-	enumMap["Midship"] 	= m;
-	enumMap["Aft"] 		= a;
+	enumMap["Fore"] = f;
+	enumMap["Mid"] 	= m;
+	enumMap["Aft"] 	= a;
 }
 
 template <typename T>

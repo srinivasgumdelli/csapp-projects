@@ -130,8 +130,80 @@ int main(){
 	cin >> z.blk_Lct;
 	cout << "\nEnter the depth of each layer in the Torpedo Bulkhead: ";
 	cin >> z.blk_D;
+	
+	Gun *b = new Gun();
+	Gun *_b = b;
+	bool batteryDone = false;
+	cout << "The following is the input for the batteries" << endl;
+	while(!batteryDone){
+		cout << "Placement Location (Fore, Mid, Aft): ";
+		string pLoc;
+		cin >> pLoc;
+		EnumParser<Placement> _loc;
+		b->loc = _loc.ParseEnum(pLoc);
 
-	Ship cur(x, y, z, _db, _par);
+		cout << "Beam Placement (1) or Centerline (0)? : ";
+		cin >> b->beam;
+		
+		if (b->beam){
+			cout << "Echelon (1) or Symmetric (0)? : ";
+			cin >> b->echelon;
+		} else
+			b->echelon = false;
+			
+		cout << "Distance between Turrets: ";
+		cin >> b->spread;
+		
+		cout << "Max Angle of Battery: ";
+		cin >> b->maxAngle;
+		
+		cout << "Gun Diameter: ";
+		cin >> b->g.d;
+		
+		cout << "Gun Caliber: ";
+		cin >> b->g.L;
+		
+		cout << "Gun Year: ";
+		cin >> b->g.Y;
+		
+		cout << "Shells per Barrel: ";
+		cin >> b->g.SpB;
+		
+		/* While Loop for Mount */
+		bool mountDone = false;
+		Mount *cur = new Mount();
+		b->head = cur;
+		while(!mountDone){
+			cout << "Number of Barrels on this Mount: ";
+			cin >> cur->barrel_ct;
+			
+			cout << "Height of the Mount relative to the Weather Deck: ";
+			cin >> cur->mount_H;
+		
+			cout << "Done with mount input? Enter 1 if so, 0 otherwise: ";
+			cin >> mountDone;
+			
+			if (!mountDone){
+				Mount *nex 	= new Mount();
+				cur->next 	= nex;
+				cur 		= nex;
+			} else
+				cur->next 	= NULL;
+		}
+		
+		
+		cout << "Enter 1 to proceed to report, 0 to continue: ";
+		cin >> batteryDone;
+		
+		if (!batteryDone){
+			Gun *nex 	= new Gun();
+			b->next 		= nex;
+			b				= nex;
+		} else
+			g->next 		= NULL;
+	}
+
+	Ship cur(x, y, z, _db, _par, _b);
 
 	cout << "\n\nHere is the detailed report: " << endl;
 	cur.output();
@@ -246,10 +318,10 @@ int main(){
 				}
 			default: cout << "Invalid Category Number!" << endl; continue;
 		}
-
+		
 		esc:
 
-		cur = Ship(x, y, z, _db, _par);
+		cur = Ship(x, y, z, _db, _par, _b);
 
 		cout << "\n\nHere is the detailed report: " << endl;
         cur.output();
